@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    background-color: #F5F5F5;
+    color: #333333;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Cinzel', serif;
+    font-size: 48px;
+    color: #2E8B57; /* Зеленый в стиле фэнтези */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+}
+
+.logo:hover {
+    filter: drop-shadow(0 0 10px rgba(46, 139, 87, 0.8));
+}
+
+.logo.clicked {
+    top: 20px;
+    left: 20px;
+    transform: none;
+    font-size: 32px;
+    animation: none;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 20px;
+}
+
+.menu-button {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    background: none;
+    border: none;
+    color: #2E8B57;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.menu-button:hover {
+    color: #DAA520; /* Золотистый акцент */
+}
+
+.content {
+    display: none;
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    color: #2E8B57;
+}
+
+a {
+    color: #2E8B57;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #DAA520;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
