@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXCHK</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -16,8 +16,12 @@
             <a href="#about" class="button">Обо мне</a>
             <a href="#works" class="button">Работы</a>
             <a href="#blog" class="button">Блог</a>
-            <a href="#contact" class="button">Контакты</a>
+            <a href="#opinion" class="button">Мнение</a>
         </nav>
+        <div class="auth">
+            <button id="loginBtn" class="button">Войти</button>
+            <button id="logoutBtn" class="button" style="display: none;">Выйти</button>
+        </div>
     </header>
 
     <section id="home">
@@ -32,11 +36,11 @@
 
     <section id="works">
         <h2>Работы</h2>
-        <div class="works-grid">
-            <div class="work-card">Работа 1</div>
-            <div class="work-card">Работа 2</div>
-            <div class="work-card">Работа 3</div>
+        <div id="adminWorks" style="display: none;">
+            <input type="text" id="telegraphLink" placeholder="Ссылка на Telegraph">
+            <button id="addWork" class="button">Добавить работу</button>
         </div>
+        <div class="works-grid" id="worksGrid"></div>
     </section>
 
     <section id="blog">
@@ -44,15 +48,25 @@
         <p>Пост 1 - 24.03.2025</p>
     </section>
 
-    <section id="contact">
-        <h2>Контакты</h2>
-        <form>
-            <input type="text" placeholder="Имя">
-            <input type="email" placeholder="Email">
-            <textarea placeholder="Сообщение"></textarea>
-            <button type="submit" class="button">Отправить</button>
-        </form>
+    <section id="opinion">
+        <h2>Мнение</h2>
+        <div id="commentForm" style="display: none;">
+            <textarea id="commentText" placeholder="Ваш комментарий"></textarea>
+            <button id="submitComment" class="button">Отправить</button>
+        </div>
+        <div id="comments"></div>
     </section>
+
+    <!-- Модальное окно для входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход</h2>
+            <input type="text" id="username" placeholder="Ник">
+            <input type="password" id="password" placeholder="Пароль">
+            <button id="submitLogin" class="button">Войти</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
