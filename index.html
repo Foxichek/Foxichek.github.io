@@ -5,34 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FXCHK</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Merriweather&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="logo">FXCHK</div>
-    <nav class="menu">
-        <button class="menu-button" data-section="about">Обо мне</button>
-        <button class="menu-button" data-section="works">Произведения</button>
-        <button class="menu-button" data-section="links">Ссылки</button>
-        <button class="menu-button" data-section="other">Другое</button>
-    </nav>
-    <div class="content">
-        <div id="about" class="section">
-            <h2>Обо мне</h2>
-            <p>Я — FXCHK, писатель, создающий миры из слов. Добро пожаловать в мою вселенную! Пишу собственную книгу «Легенды Гармоникса». Данный сайт создан для будущей публикации сюда новостей!</p>
+    <header>
+        <div class="logo">FXCHK</div>
+        <div class="hamburger">☰</div>
+        <nav class="menu">
+            <a href="#home" class="button">Главная</a>
+            <a href="#about" class="button">Обо мне</a>
+            <a href="#works" class="button">Работы</a>
+            <a href="#blog" class="button">Блог</a>
+            <a href="#contact" class="button">Контакты</a>
+        </nav>
+    </header>
+
+    <section id="home">
+        <h1 class="title">FXCHK: Истории из цифровых теней</h1>
+        <a href="#works" class="button cta">Читать работы</a>
+    </section>
+
+    <section id="about">
+        <h2>Обо мне</h2>
+        <p>Я — FXCHK, писатель, создающий миры на грани реальности и цифровой бездны.</p>
+    </section>
+
+    <section id="works">
+        <h2>Работы</h2>
+        <div class="works-grid">
+            <div class="work-card">Работа 1</div>
+            <div class="work-card">Работа 2</div>
+            <div class="work-card">Работа 3</div>
         </div>
-        <div id="works" class="section">
-            <h2>Произведения</h2>
-            <p>Здесь будут мои рассказы и книги. Скоро добавлю!</p>
-        </div>
-        <div id="links" class="section">
-            <h2>Ссылки</h2>
-            <p>Следите за мной: <a href="#">Telegram</a>, <a href="#">X (Twitter)</a></p>
-        </div>
-        <div id="other" class="section">
-            <h2>Другое</h2>
-            <p>Заметки, мысли и прочее. Оставайтесь на связи!</p>
-        </div>
-    </div>
+    </section>
+
+    <section id="blog">
+        <h2>Блог</h2>
+        <p>Пост 1 - 24.03.2025</p>
+    </section>
+
+    <section id="contact">
+        <h2>Контакты</h2>
+        <form>
+            <input type="text" placeholder="Имя">
+            <input type="email" placeholder="Email">
+            <textarea placeholder="Сообщение"></textarea>
+            <button type="submit" class="button">Отправить</button>
+        </form>
+    </section>
+
     <script src="script.js"></script>
 </body>
 </html>
