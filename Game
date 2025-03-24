@@ -11,62 +11,128 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             font-family: 'Arial', sans-serif;
             overflow: hidden;
+            position: relative;
         }
 
         .container {
             text-align: center;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            color: white;
+            color: #fff;
             font-size: 2.5em;
             margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         #counter {
-            font-size: 4em;
+            font-size: 4.5em;
             color: #fff;
             margin: 20px 0;
             transition: transform 0.1s ease;
         }
 
-        #counter.active {
-            transform: scale(1.1);
+        #spaceKey {
+            width: 250px;
+            height: 70px;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') no-repeat center;
+            background-size: cover;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            user-select: none;
+            margin: 20px auto;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
 
-        .press-text {
-            color: #fff;
-            font-size: 1.2em;
-            opacity: 0.8;
+        #spaceKey:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             pointer-events: none;
             animation: fall 3s linear forwards;
         }
 
         @keyframes fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .score-effect {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.5em;
+            animation: scorePop 1s ease forwards;
+        }
+
+        @keyframes scorePop {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+
+        .pulse {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: pulseEffect 0.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes pulseEffect {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        #shop {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            backdrop-filter: blur(10px);
+        }
+
+        .shop-item {
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .shop-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .shop-item.active {
+            background: rgba(0, 255, 0, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 20px; }
+            #spaceKey { width: 180px; height: 50px; }
+            #counter { font-size: 3em; }
+            h1 { font-size: 2em; }
+            #shop { font-size: 0.9em; padding: 10px; }
         }
     </style>
 </head>
@@ -74,39 +140,113 @@
     <div class="container">
         <h1>Space Clicker</h1>
         <div id="counter">0</div>
-        <div class="press-text">Нажимай Space!</div>
+        <div id="spaceKey"></div>
+    </div>
+    <div id="shop">
+        <h3>Магазин</h3>
+        <div class="shop-item" data-key="default" data-cost="0">Стандарт (0)</div>
+        <div class="shop-item" data-key="red" data-cost="100">Красная (100)</div>
+        <div class="shop-item" data-key="blue" data-cost="200">Синяя (200)</div>
     </div>
 
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568.wav"></audio>
     <audio id="achievementSound" src="https://assets.mixkit.co/active_storage/sfx/2575/2575.wav"></audio>
+    <audio id="keyPressSound" src="https://assets.mixkit.co/active_storage/sfx/2892/2892.wav"></audio>
 
     <script>
         let count = 0;
         const counter = document.getElementById('counter');
+        const spaceKey = document.getElementById('spaceKey');
+        const shop = document.getElementById('shop');
         const clickSound = document.getElementById('clickSound');
         const achievementSound = document.getElementById('achievementSound');
+        const keyPressSound = document.getElementById('keyPressSound');
 
+        const keyStyles = {
+            default: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+            red: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?tint=red',
+            blue: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?tint=blue'
+        };
+
+        function handleClick() {
+            count++;
+            counter.textContent = count;
+
+            // Анимация счетчика
+            counter.style.transform = 'scale(1.1)';
+            keyPressSound.currentTime = 0;
+            keyPressSound.play();
+
+            setTimeout(() => {
+                counter.style.transform = 'scale(1)';
+            }, 100);
+
+            // Случайный эффект "+1"
+            const scoreEffect = document.createElement('div');
+            scoreEffect.className = 'score-effect';
+            scoreEffect.textContent = '+1';
+            const offsetX = (Math.random() - 0.5) * 100;
+            const offsetY = (Math.random() - 0.5) * 100;
+            scoreEffect.style.left = `${spaceKey.offsetLeft + spaceKey.offsetWidth / 2 + offsetX}px`;
+            scoreEffect.style.top = `${spaceKey.offsetTop + spaceKey.offsetHeight / 2 + offsetY}px`;
+            document.body.appendChild(scoreEffect);
+            setTimeout(() => scoreEffect.remove(), 1000);
+
+            // Эффект пульсации
+            const pulse = document.createElement('div');
+            pulse.className = 'pulse';
+            pulse.style.left = `${spaceKey.offsetLeft + spaceKey.offsetWidth / 2 - 50}px`;
+            pulse.style.top = `${spaceKey.offsetTop + spaceKey.offsetHeight / 2 - 50}px`;
+            document.body.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 500);
+
+            // Конфетти каждые 100 нажатий
+            if (count % 100 === 0) {
+                createConfetti();
+                achievementSound.currentTime = 0;
+                achievementSound.play();
+            }
+        }
+
+        // Обработка клика и касания
+        spaceKey.addEventListener('click', handleClick);
+        spaceKey.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleClick();
+        });
+
+        // Обработка клавиши Space
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
                 event.preventDefault();
-                count++;
-                counter.textContent = count;
-                
-                // Анимация при нажатии
-                counter.classList.add('active');
-                clickSound.currentTime = 0;
-                clickSound.play();
-                
+                handleClick();
+                spaceKey.style.transform = 'scale(0.95)';
+                spaceKey.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.5)';
                 setTimeout(() => {
-                    counter.classList.remove('active');
+                    spaceKey.style.transform = 'scale(1)';
+                    spaceKey.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.4)';
                 }, 100);
+            }
+        });
 
-                // Конфетти каждые 100 нажатий
-                if (count % 100 === 0) {
-                    createConfetti();
-                    achievementSound.currentTime = 0;
-                    achievementSound.play();
-                }
+        // Магазин
+        shop.addEventListener('click', (e) => {
+            const item = e.target.closest('.shop-item');
+            if (!item) return;
+
+            const cost = parseInt(item.dataset.cost);
+            const key = item.dataset.key;
+
+            if (count >= cost) {
+                count -= cost;
+                counter.textContent = count;
+                spaceKey.style.background = `url('${keyStyles[key]}') no-repeat center`;
+                spaceKey.style.backgroundSize = 'cover';
+
+                document.querySelectorAll('.shop-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            } else {
+                alert('Недостаточно кликов!');
             }
         });
 
@@ -114,23 +254,12 @@
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                
-                // Случайный цвет
-                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+                const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
                 confetti.style.backgroundColor = randomColor;
-                
-                // Случайная позиция по X
-                confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Случайная задержка анимации
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                
+                confetti.style.left = `${Math.random() * (window.innerWidth - 12)}px`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
                 document.body.appendChild(confetti);
-                
-                // Удаление конфетти после анимации
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
+                setTimeout(() => confetti.remove(), 3000);
             }
         }
     </script>
